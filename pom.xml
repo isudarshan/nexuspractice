@@ -70,9 +70,9 @@
 
 	</build>
 
-	<!-- <profiles>
+	<profiles>
 		<profile>
-			<id>release</id>
+			<id>default</id>
 		</profile>
-	</profiles> -->
+	</profiles>
 </project>
