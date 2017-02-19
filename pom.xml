@@ -10,9 +10,9 @@
 	<url>http://maven.apache.org</url>
 
 	<scm>
-		<connection>scm:git:https://isudarshan@gmail.com:Prasannam@123@github.com/isudarshan/nexuspractice.git</connection>
+		<connection>scm:git:https://github.com/isudarshan/nexuspractice.git</connection>
 		<url>https://github.com/isudarshan/nexuspractice.git</url>
-		<developerConnection>scm:git:https://isudarshan@gmail.com:Prasannam@123@github.com/isudarshan/nexuspractice.git</developerConnection>
+		<developerConnection>scm:git:https://github.com/isudarshan/nexuspractice.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
