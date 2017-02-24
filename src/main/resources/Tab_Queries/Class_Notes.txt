@@ -1,0 +1,146 @@
+EC2-Host Configuration
+======================
+Explain the need of configuring ssh.
+
+** ~/.ssh/config file creation **
+
+Host zarvis
+Hostname public DNS/Elastic Ip
+User ec2-user/ubuntu
+IdentityFile /path/to/pemfile
+
+ssh zarvis
+
+
+MySql Instalation
+=================
+
+To install MySQL, ssh into your instance and type the following command:
+sudo yum install mysql-server
+sudo mysql_secure_installation (Explain importance)
+
+To start MySQL:
+sudo service mysqld start
+
+To stop MySQL:
+sudo service mysqld stop
+
+
+Tomcat Instalation
+==================
+
+1. Apt Installation
+
+This method is easy, but you will get repository version .
+Check jdk before installing tomcat.
+
+If not exists
+sudo apt-get install openjdk-7-jdk
+
+Install tomcat 7 and other packages
+sudo apt-get install tomcat7 tomcat7-docs tomcat7-examples tomcat7-admin
+
+Configure username and password to manage tomcat
+/etc/tomcat7/tomcat-users.xml
+
+<role rolename="manager-gui"/>
+<role rolename="admin-gui"/>
+<user username="codezarvis" password="password" roles="manager-gui,admin-gui"/>
+
+
+2.Manual Instalation
+
+**Highly recommended**
+Install JDK 7 before installing tomcat.
+sudo apt-get install openjdk-7-jdk
+
+Download Apache Tomcat
+wget http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.54/bin/apache-tomcat-7.0.54.tar.gz
+
+Extract the tar file
+
+move to /usr/local/ directory.
+tar -xvf apache-tomcat-7.0.54.tar.gz
+sudo mv apache-tomcat-7.0.54 /usr/local/
+
+Configure username and password to manage tomcat (tomcat-users.xml)
+
+<role rolename="manager-gui"/>
+<role rolename="admin-gui"/>
+<user username="codezarvis" password="password" roles="manager-gui,admin-gui"/>
+
+Register as serice
+
+Create a new file tomcat754 in /etc/init.d/
+
+change CATALINA_HOME value according to path (Explain to students about this ..)
+----------------------------------------------------------
+#!/bin/bash
+export CATALINA_HOME=/usr/local/apache-tomcat-7.0.54
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+start() {
+sh $CATALINA_HOME/bin/startup.sh
+}
+stop() {
+sh $CATALINA_HOME/bin/shutdown.sh
+}
+case $1 in
+  start|stop) $1;;
+  restart) stop; start;;
+  *) echo "Run as $0 <start|stop|restart>"; exit 1;;
+esac
+----------------------------------------------------------
+
+Change the service file permission.
+sudo chmod 755 /etc/init.d/tomcat754
+
+Just start the service .
+sudo /etc/init.d/tomcat754 start
+
+(Optional setup, explain implications of this)
+Use command to start service automatically while startup.
+sudo update-rc.d tomcat754 defaults
+
+*** Explain to students about update-rc.d , manyof the might not know about this ***
+
+1.Linux based systems uses the service command to control services.
+2.update-rc.d for adding and removing services from start up.
+3.Using the service command we can start, stop, restart and display all available services.
+(Explain Tomcat, Mysql etc which you already installed)
+4.With update-rc.d we can add and remove services
+(Explain related commands) like service --status-all, update-rc.d -f tomcat7 remove
+(Dont go to service levels & priorites)
+
+GIT Repo Setup
+==============
+Easy to explain ...
+
+1.Create local git project and push it to remote repo
+mkdir sample-proj
+cd sample-proj
+git init
+** just add few file to push **
+** add & commit files **
+
+2.Create git repository on EC2 instance
+mkdir sample-proj.git
+cd sample-proj.git
+git init --bare ** Explain bare vs non bare repos **
+
+** git ls-tree -r master*
+
+
+3.Add remote to the project in local
+git remote add origin zarvis:/home/ec2-user/sample-proj.git
+git push origin master
+
+4.Checkout the project for testing.
+git clone zarvis:/home/ec2-user/test.git
+
+
+================================
+
+
+CREATE  DATABASE bitbucket CHARACTER SET utf8 COLLATE utf8_bin;
+GRANT  ALL PRIVILEGES ON bitbucket.* TO 'bitbucketuser'@'localhost' IDENTIFIED BY  'bitbucketpassword';
+FLUSH  PRIVILEGES;
